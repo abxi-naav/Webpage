@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Engineer’s Muse</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e1e8f, #7e1ec4, #000000);
+      background-size: 400% 400%;
+      color: white;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      animation: popIn 1.2s ease-out;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      min-height: 180px;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #ffe58f;
+    }
+
+    .card p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+    }
+
+    .fade-out {
+      opacity: 0;
+    }
+
+    .fade-in {
+      opacity: 1;
+    }
+
+    .button-container {
+      text-align: center;
+      margin-top: 3rem;
+    }
+
+    .glow-button {
+      background: linear-gradient(to right, #ff4b91, #8a2be2);
+      border: none;
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glow-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.9);
+    }
+
+    input[type="number"] {
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      margin: 0.5rem;
+      width: 70px;
+      border: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚙️ Engineer's Muse</h1>
+
+    <div class="grid">
+      <!-- Quote Card -->
+      <div class="card" id="quoteCard">
+        <h2>✨ Quote of the Day</h2>
+        <p id="quoteText">
+          Scientists investigate that which already is; engineers create that which has never been. – Albert Einstein
+        </p>
+      </div>
+
+      <!-- Knowledge Card -->
+      <div class="card" id="knowledgeCard">
+        <h2>📚 Knowledge Nugget</h2>
+        <p id="knowledgeText">
+          Did you know? The world’s first computer programmer was Ada Lovelace...
+        </p>
+      </div>
+    </div>
+
+    <div class="button-container">
+      <button class="glow-button" id="getInspiredBtn">Get Inspired Daily</button>
+    </div>
+
+    <div id="reminderForm" style="display:none; text-align:center; margin-top:2rem;">
+      <label for="hourInput">Hour:</label>
+      <input type="number" id="hourInput" min="0" max="23" placeholder="00" required>
+      <label for="minuteInput">Minute:</label>
+      <input type="number" id="minuteInput" min="0" max="59" placeholder="00" required>
+      <button onclick="setReminder()">Set Reminder</button>
+    </div>
+  </div>
+
+  <script>
+    const quotes = [
+      'Scientists investigate that which already is; engineers create that which has never been. – Albert Einstein',
+      'Engineering is the closest thing to magic that exists in the world. – Elon Musk',
+      'A good scientist has original ideas. A good engineer makes them work. – Freeman Dyson',
+      'The engineer has been, and is, a maker of history. – James Kip Finch',
+      'First, solve the problem. Then, write the code. – John Johnson'
+    ];
+
+    const knowledgeList = [
+      "The word 'engineer' comes from the Latin 'ingenium', meaning cleverness.",
+      "GPS works only because of Einstein’s theory of relativity.",
+      "NASA’s rovers are full of engineering—from wheels to solar panels.",
+      "Electrical engineers helped invent smartphones, computers, and Wi-Fi.",
+      "Civil engineers design earthquake-proof buildings!"
+    ];
+
+    let currentQuote = 0;
+    const quoteText = document.getElementById("quoteText");
+    const knowledgeCard = document.getElementById("knowledgeCard");
+    const knowledgeText = document.getElementById("knowledgeText");
+
+    // Slide quotes every 5 seconds
+    setInterval(() => {
+      quoteText.classList.add("fade-out");
+      setTimeout(() => {
+        currentQuote = (currentQuote + 1) % quotes.length;
+        quoteText.textContent = quotes[currentQuote];
+        quoteText.classList.remove("fade-out");
+        quoteText.classList.add("fade-in");
+      }, 500);
+      setTimeout(() => quoteText.classList.remove("fade-in"), 1000);
+    }, 5000);
+
+    knowledgeCard.addEventListener("click", () => {
+      const random = Math.floor(Math.random() * knowledgeList.length);
+      knowledgeText.textContent = knowledgeList[random];
+    });
+
+    // Handle "Get Inspired Daily" Button Click
+    document.getElementById('getInspiredBtn').addEventListener('click', () => {
+      document.getElementById('reminderForm').style.display = 'block';
+    });
+
+    function setReminder() {
+      const hour = document.getElementById('hourInput').value;
+      const minute = document.getElementById('minuteInput').value;
+
+      if (hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
+        alert(`Reminder set for ${hour}:${minute}`);
+        localStorage.setItem('reminderTime', `${hour}:${minute}`);
+      } else {
+        alert('Please enter a valid time.');
+      }
+    }
+  </script>
+</body>
+</html>
